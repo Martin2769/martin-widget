@@ -3,6 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Martin Custom Widget</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 40px;
+    }
+    .widget {
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-top: 20px;
+    }
+    #countdown {
+      font-size: 2em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Widget for <span id="brukernavn">bruker</span></h1>
+
+  <div class="widget">
+    <p><strong>Navn:</strong> <span id="navn"></span></p>
+    <p><strong>Type:</strong> <span id="type"></span></p>
+    <p><strong>Dato:</strong> <span id="dato"></span></p>
+    <p id="countdown"></p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const navn = params.get("navn") || "Ukjent";
+    const brukernavn = params.get("brukernavn") || "ukjent";
+    const type = params.get("type") || "nedtelling";
+    const dato = params.get("dato") || null;
+
+    document.getElementById("navn").textContent = navn;
+    document.getElementById("brukernavn").textContent = brukernavn;
+    document.getElementById("type").textContent = type;
+    document.getElementById("dato").textContent = dato || "Ikke satt";
+
+    // Nedtelling
+    if (dato) {
+      const countdownEl = document.getElementById("countdown");
+      const targetDate = new Date(dato + "T00:00:00");
+
+      function updateCountdown() {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+          countdownEl.textContent = "🎉 Dagen er her!";
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        countdownEl.textContent = `${days}d ${hours}t ${minutes}m ${seconds}s`;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Martin Custom Widgets</title>
 </head>
 <body>
